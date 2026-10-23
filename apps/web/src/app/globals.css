@@ -1,10 +1,19 @@
-
 @import "tailwindcss";
 @theme inline {
   --font-sans: var(--font-inter);
   --font-serif: var(--font-fraunces);
 }
+@theme {
+  /* Dr. Rodas Foundation brand palette (master prompt, 2026-10-23) */
+  --color-navy: #0B1239;
+  --color-navy-2: #1B2452;
+  --color-gold: #A77C2C;
+  --color-gold-dark: #8C6622;
+  --color-gold-light: #D9B45B;
+  --color-ivory: #FAF7F0;
+  --color-mist: #E8E8EC;
+}
 html { scroll-behavior: smooth; }
-body { background: #faf7f2; color: #1c1917; font-family: var(--font-inter), system-ui, sans-serif; }
+body { background: #FAF7F0; color: #0B1239; font-family: var(--font-inter), var(--font-noto-ethiopic), "Noto Sans Ethiopic", system-ui, sans-serif; }
 .font-serif { font-family: var(--font-fraunces), Georgia, serif; }
-::selection { background: #f59e0b33; }
+::selection { background: #A77C2C33; }

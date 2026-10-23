@@ -2,6 +2,7 @@
 set -e
 # Staging preview boot: ephemeral SQLite, re-seeded on each deploy (preview data only).
 touch database/database.sqlite
+[ -f .env ] || cp .env.example .env
 php artisan key:generate --force
 php artisan migrate:fresh --seed --force
 php artisan config:clear
