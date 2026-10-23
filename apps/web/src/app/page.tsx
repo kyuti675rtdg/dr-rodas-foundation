@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { BadgeCheck, Mail, ShieldCheck } from "lucide-react";
 import CampaignCard from "@/components/CampaignCard";
 import Reveal from "@/components/Reveal";
 import { Rubric, SectionHeading } from "@/components/Editorial";
@@ -19,6 +19,32 @@ const PROGRAMS = [
   ["Digital Innovation", "Responsible uses of digital technology to preserve knowledge and expand access to it.", "/about"],
 ] as const;
 
+/* The six official exhibition areas, in the order of docs/OFFICIAL-CONTENT.md.
+   Each line is a tight paraphrase of the official description — no new claims. */
+const AREAS = [
+  ["Ge’ez Language and Manuscript Heritage", "The Ge’ez language, script, and historical manuscripts, and their importance in Ethiopian scholarship and cultural life."],
+  ["Gematria and Numerical Traditions", "Numerical values associated with letters and traditional systems — documented evidence kept distinct from interpretation."],
+  ["Ethiopian Astronomy and Cosmology", "Documented astronomical traditions, calendars, and timekeeping, presented in their cultural context."],
+  ["Ethiopian History and Intellectual Traditions", "Historical records, scholarship, and the people and traditions behind Ethiopia’s intellectual legacy."],
+  ["Research, Archives, and Digital Preservation", "Responsible documentation, digitization, and study of manuscripts and historical records."],
+  ["Education and Interactive Learning", "Educational exhibitions, digital displays, and workshops for students, families, educators, and visitors."],
+] as const;
+
+const GIVING_STEPS = [
+  ["Choose", "Choose a campaign or the Museum Project fund you would like to support."],
+  ["Give securely", "Give securely — payment methods activate once the foundation’s merchant accounts are verified."],
+  ["See it reported", "See it reported — totals count confirmed donations only and are published on the Transparency page."],
+] as const;
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Dr. Rodas Foundation",
+  url: "https://drrodas.org",
+  logo: "https://drrodas.org/logo.png",
+  email: "support@drrodas.org",
+};
+
 export default function Home() {
   const featured = CAMPAIGNS.filter((c) => c.featured);
   const museum = CAMPAIGNS[0];
@@ -26,46 +52,86 @@ export default function Home() {
   const latestNews = NEWS.slice(0, 3);
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c") }}
+      />
       {/* Hero — the one memorable moment: an oversized serif headline, the
           foundation medallion, and a real Garima Gospels folio. Quiet else. */}
-      <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:pt-20">
-        <Reveal>
-          <div className="flex items-center gap-4">
-            <Image src="/logo.png" alt="Dr. Rodas Foundation — official logo" width={56} height={56} priority className="h-14 w-14 rounded-full bg-white object-contain ring-1 ring-gold/60" />
-            <p className="text-sm text-navy/60">ዶክተር ሮዳስ ፋውንዴሽን · Dr. Rodas Foundation</p>
-          </div>
-          <h1 className="mt-8 max-w-4xl font-serif text-5xl leading-[1.04] font-medium text-navy sm:text-6xl lg:text-7xl">
-            Preserving Heritage.<br />Advancing Knowledge.<br />Inspiring Generations.
-          </h1>
-          <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-14">
-            <figure className="lg:col-span-7">
-              <div className="group overflow-hidden border border-line">
-                <Image
-                  src="/images/garima-gospels-folio.jpg"
-                  alt="Illuminated folio from the Garima Gospels, one of the oldest surviving Ethiopian illuminated manuscripts"
-                  width={1350} height={1743}
-                  priority
-                  className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] sm:aspect-[16/10]"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs leading-5 text-navy/55">
-                A folio of the Garima Gospels — among the world&rsquo;s oldest illuminated Christian manuscripts, written in Ge&rsquo;ez and preserved in Ethiopia. Public domain, via Wikimedia Commons.
-              </figcaption>
-            </figure>
-            <div className="lg:col-span-5 lg:pt-2">
-              <p className="text-lg leading-8 text-navy/75">
-                Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia&rsquo;s rich knowledge traditions accessible to present and future generations.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/donate" className="inline-flex min-h-12 items-center rounded-full bg-gold px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-gold-dark">Donate Now</Link>
-                <Link href="/museum-project" className="inline-flex min-h-12 items-center rounded-full border border-navy/25 px-7 py-3 font-semibold text-navy transition-colors duration-300 hover:border-gold hover:text-gold-dark">Explore the Museum Project</Link>
-              </div>
-              <p className="mt-8 border-t border-line pt-5 text-xs leading-5 text-navy/55">
-                Development preview: figures shown in preview mode are seed values (currently zero raised). Live totals come only from confirmed donations in the foundation&rsquo;s system.
-              </p>
+      <section>
+        <div className="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:pt-20">
+          <Reveal>
+            <div className="flex items-center gap-4">
+              <Image src="/logo.png" alt="Dr. Rodas Foundation — official logo" width={56} height={56} priority className="h-14 w-14 rounded-full bg-white object-contain ring-1 ring-gold/60" />
+              <p className="text-sm text-navy/60">ዶክተር ሮዳስ ፋውንዴሽን · Dr. Rodas Foundation</p>
             </div>
+            <div aria-hidden className="mt-10 h-px w-28 bg-gold" />
+            <h1 className="mt-6 max-w-4xl font-serif text-[2.6rem] leading-[1.05] font-medium text-navy sm:text-6xl sm:leading-[1.04] lg:text-7xl">
+              Preserving Heritage.<br />Advancing Knowledge.<br />Inspiring Generations.
+            </h1>
+            <p lang="am" className="mt-5 font-serif text-xl text-navy/55 sm:text-2xl">ዶክተር ሮዳስ ፋውንዴሽን</p>
+            <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-14">
+              <figure className="lg:col-span-7">
+                <div className="relative">
+                  <div aria-hidden className="absolute inset-0 translate-x-3 translate-y-3 border border-gold/50" />
+                  <div className="relative border border-line bg-parchment p-2.5 sm:p-3">
+                    <div className="group overflow-hidden">
+                      <Image
+                        src="/images/garima-gospels-folio.jpg"
+                        alt="Illuminated folio from the Garima Gospels, one of the oldest surviving Ethiopian illuminated manuscripts"
+                        width={1350} height={1743}
+                        priority
+                        className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] sm:aspect-[16/10]"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <figcaption className="mt-4 text-xs leading-5 text-navy/55">
+                  A folio of the Garima Gospels — among the world&rsquo;s oldest illuminated Christian manuscripts, written in Ge&rsquo;ez and preserved in Ethiopia. Public domain, via Wikimedia Commons.
+                </figcaption>
+              </figure>
+              <div className="lg:col-span-5 lg:pt-2">
+                <p className="text-lg leading-8 text-navy/75">
+                  Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia&rsquo;s rich knowledge traditions accessible to present and future generations.
+                </p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link href="/donate" className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-gold px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-gold-dark sm:w-auto">Donate Now</Link>
+                  <Link href="/museum-project" className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-navy/25 px-7 py-3 font-semibold text-navy transition-colors duration-300 hover:border-gold hover:text-gold-dark sm:w-auto">Explore the Museum Project</Link>
+                </div>
+                <p className="mt-8 border-t border-line pt-5 text-xs leading-5 text-navy/55">
+                  Development preview: figures shown in preview mode are seed values (currently zero raised). Live totals come only from confirmed donations in the foundation&rsquo;s system.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Trust strip — why a gift here can be believed */}
+          <div className="mt-14 grid gap-4 border-y border-line py-5 sm:grid-cols-3 sm:gap-6">
+            <Link href="/transparency" className="flex min-h-11 items-center gap-3 text-sm text-navy/70 transition-colors hover:text-navy">
+              <ShieldCheck size={18} aria-hidden className="shrink-0 text-gold-dark" />
+              Transparent fundraising — published totals
+            </Link>
+            <p className="flex min-h-11 items-center gap-3 text-sm text-navy/70">
+              <BadgeCheck size={18} aria-hidden className="shrink-0 text-gold-dark" />
+              Confirmed donations only
+            </p>
+            <a href="mailto:support@drrodas.org" className="flex min-h-11 items-center gap-3 text-sm text-navy/70 transition-colors hover:text-navy">
+              <Mail size={18} aria-hidden className="shrink-0 text-gold-dark" />
+              support@drrodas.org
+            </a>
           </div>
-        </Reveal>
+        </div>
+
+        {/* Explore bar — the four key destinations, on ivory */}
+        <nav aria-label="Explore the foundation" className="mt-14 border-t border-line bg-ivory">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-9 gap-y-2 px-4 py-4 sm:px-6">
+            <span className="text-xs font-semibold tracking-[0.18em] text-navy/50 uppercase">Explore</span>
+            <Link href="/museum-project" className="link-sweep text-sm font-semibold text-navy">Museum Project</Link>
+            <Link href="/publications" className="link-sweep text-sm font-semibold text-navy">Publications</Link>
+            <Link href="/news" className="link-sweep text-sm font-semibold text-navy">News</Link>
+            <Link href="/about" className="link-sweep text-sm font-semibold text-navy">About</Link>
+          </div>
+        </nav>
       </section>
 
       {/* Mission & vision — official text */}
@@ -128,6 +194,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Exhibition areas preview — the six official areas, in official order */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+        <SectionHeading rubric="Inside the proposed museum" title="Six areas of exploration" href="/museum-project#areas" hrefLabel="Visit the Museum Project" />
+        <div className="mt-4 grid gap-x-14 md:grid-cols-2">
+          {AREAS.map(([t, d], i) => (
+            <Reveal key={t}>
+              <div className="grid grid-cols-[auto_1fr] gap-5 border-b border-line py-6">
+                <p aria-hidden className="font-serif text-lg text-gold-dark">{String(i + 1).padStart(2, "0")}</p>
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-navy">{t}</h3>
+                  <p className="mt-1.5 leading-7 text-navy/65">{d}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/* Programs — ruled rows, official program text */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
         <SectionHeading rubric="What the foundation does" title="Programs and initiatives" href="/about" hrefLabel="All programs" />
@@ -143,6 +227,28 @@ export default function Home() {
               </div>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* How giving works — a true three-step sequence */}
+      <section className="bg-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+          <SectionHeading rubric="Donate" title="How giving works" />
+          <div className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8 lg:gap-12">
+            {GIVING_STEPS.map(([t, d], i) => (
+              <Reveal key={t} delay={i * 0.08}>
+                <div className="border-t-2 border-gold/60 pt-5">
+                  <p className="font-serif text-lg text-gold-dark"><span className="sr-only">Step {i + 1}:</span><span aria-hidden>{String(i + 1).padStart(2, "0")}</span></p>
+                  <h3 className="mt-2 font-serif text-xl font-medium text-navy">{t}</h3>
+                  <p className="mt-2 leading-7 text-navy/65">{d}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <Link href="/donate" className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-navy px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-navy-2 sm:w-auto">Donate Now</Link>
+            <Link href="/transparency" className="link-sweep min-h-12 content-center text-center font-semibold text-gold-dark sm:text-left">View financial transparency</Link>
+          </div>
         </div>
       </section>
 
@@ -169,6 +275,24 @@ export default function Home() {
         <SectionHeading rubric="News" title="Foundation news &amp; announcements" href="/news" hrefLabel="All news" />
         <div className="grid gap-x-12 lg:grid-cols-3">
           {latestNews.map((a) => <NewsCard key={a.slug} a={a} />)}
+        </div>
+      </section>
+
+      {/* Commitment — a pull-quote from the official Our Commitment text */}
+      <section className="bg-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+          <Reveal>
+            <Rubric>Our Commitment</Rubric>
+            <blockquote className="mt-6 max-w-4xl">
+              <p className="font-serif text-3xl leading-snug font-medium text-navy italic sm:text-4xl lg:text-[2.75rem] lg:leading-[1.25]">
+                &ldquo;Preserving heritage is an investment in the future.&rdquo;
+              </p>
+              <p className="mt-6 max-w-2xl leading-7 text-navy/65">
+                By connecting historical knowledge with education, research, and technology, Dr. Rodas Foundation aims to help future generations understand, appreciate, and build upon Ethiopia&rsquo;s intellectual and cultural legacy.
+              </p>
+            </blockquote>
+            <Link href="/about" className="link-sweep mt-7 inline-block font-semibold text-gold-dark">About the foundation</Link>
+          </Reveal>
         </div>
       </section>
 

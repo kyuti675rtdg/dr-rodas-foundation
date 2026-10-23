@@ -89,7 +89,7 @@ export default function MuseumProject() {
         </div>
       </section>
 
-      <section className="bg-ivory">
+      <section id="areas" className="scroll-mt-20 bg-ivory">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
           <Reveal>
             <Rubric>Inside the proposed museum</Rubric>
