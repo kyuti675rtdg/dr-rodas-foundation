@@ -1,6 +1,6 @@
 <?php
 namespace Database\Seeders;
-use App\Models\{Campaign, CampaignCategory, Currency, PaymentProviderRecord, Permission, Role, User};
+use App\Models\{Campaign, CampaignCategory, Currency, NewsArticle, PaymentProviderRecord, Permission, Publication, Role, User};
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 class DatabaseSeeder extends Seeder {
@@ -42,5 +42,21 @@ class DatabaseSeeder extends Seeder {
                 'category_id' => CampaignCategory::where('slug', $c['category'])->first()?->id, 'target_amount' => $c['target'],
                 'currency_id' => $usd->id, 'status' => 'published', 'is_featured' => $c['featured']]);
         }
+        // CONTENT SEED — clearly-labelled development placeholders, mirroring apps/web/src/lib/data.ts.
+        // No real publication or announcement is claimed. The news seed explainer is published so the
+        // public endpoint is demonstrable; the publication placeholder stays UNPUBLISHED (draft)
+        // until the foundation approves a real work.
+        NewsArticle::firstOrCreate(['slug' => 'seed-newsroom-explainer'], [
+            'title' => 'Seed article: how this newsroom will work', 'subtitle' => 'A development placeholder explaining the foundation news workflow',
+            'author' => 'Foundation communications (to be confirmed)', 'summary' => 'Development seed article — not a real foundation announcement.',
+            'body' => 'This is a development seed article. It does not announce any event, partnership, milestone or result. Verified news will be drafted, reviewed and published by authorized staff.',
+            'category' => 'Foundation Announcements', 'is_featured' => true, 'is_published' => true, 'published_at' => now(),
+        ]);
+        Publication::firstOrCreate(['slug' => 'seed-geez-language-studies'], [
+            'title' => 'Seed placeholder — Ge\'ez language studies', 'author' => 'Author to be confirmed by the foundation',
+            'summary' => 'Development seed placeholder — awaiting foundation approval. Not a published foundation work.',
+            'body' => 'Development seed placeholder. No publication is claimed here.',
+            'category' => 'Ge\'ez Language', 'topic' => 'Ge\'ez language', 'is_featured' => true, 'is_published' => false, 'published_at' => null,
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
-use App\Http\Controllers\Api\V1\{AuthController, DonationController, DonorController, PublicCampaignController, WebhookController};
-use App\Http\Controllers\Api\V1\Admin\{CampaignAdminController, FinanceController};
+use App\Http\Controllers\Api\V1\{AuthController, DonationController, DonorController, PublicCampaignController, PublicContentController, WebhookController};
+use App\Http\Controllers\Api\V1\Admin\{CampaignAdminController, ContentAdminController, FinanceController};
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -11,6 +11,11 @@ Route::prefix('v1')->group(function () {
     Route::get('updates', [PublicCampaignController::class, 'updates']);
     Route::get('payment-methods', [PublicCampaignController::class, 'paymentMethods']);
     Route::get('transparency', [PublicCampaignController::class, 'transparency']);
+    // Content (published only)
+    Route::get('publications', [PublicContentController::class, 'publications']);
+    Route::get('publications/{slug}', [PublicContentController::class, 'publication']);
+    Route::get('news', [PublicContentController::class, 'news']);
+    Route::get('news/{slug}', [PublicContentController::class, 'newsArticle']);
     Route::get('donations/{reference}', [DonationController::class, 'show']);
     Route::post('donations', [DonationController::class, 'store'])->middleware('throttle:30,1');
     // Webhooks (signature-verified inside the controller; no session auth)
@@ -34,6 +39,16 @@ Route::prefix('v1')->group(function () {
                 Route::put('campaigns/{campaign}', [CampaignAdminController::class, 'update']);
                 Route::delete('campaigns/{campaign}', [CampaignAdminController::class, 'destroy']);
                 Route::post('campaigns/{campaign}/updates', [CampaignAdminController::class, 'storeUpdate']);
+            });
+            Route::get('publications', [ContentAdminController::class, 'publications']);
+            Route::get('news', [ContentAdminController::class, 'news']);
+            Route::middleware('role:foundation_admin,campaign_manager')->group(function () {
+                Route::post('publications', [ContentAdminController::class, 'storePublication']);
+                Route::put('publications/{publication}', [ContentAdminController::class, 'updatePublication']);
+                Route::delete('publications/{publication}', [ContentAdminController::class, 'destroyPublication']);
+                Route::post('news', [ContentAdminController::class, 'storeNews']);
+                Route::put('news/{newsArticle}', [ContentAdminController::class, 'updateNews']);
+                Route::delete('news/{newsArticle}', [ContentAdminController::class, 'destroyNews']);
             });
             Route::middleware('role:foundation_admin,finance_officer,auditor')->group(function () {
                 Route::get('finance/summary', [FinanceController::class, 'summary']);
