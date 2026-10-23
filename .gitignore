@@ -1,0 +1,9 @@
+**/node_modules/
+**/vendor/
+**/.next/
+**/.env
+!**/.env.example
+apps/api/database/*.sqlite*
+apps/api/storage/logs/*.log
+apps/api/.phpunit.result.cache
+.DS_Store

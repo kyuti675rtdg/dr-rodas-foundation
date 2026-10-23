@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;
+class Donation extends Model { protected $fillable=['reference','campaign_id','donor_profile_id','user_id','designation','donation_type','amount','currency_id','reporting_amount','exchange_rate_id','status','is_anonymous','donor_name','donor_email','donor_country','message','message_is_public','idempotency_key','confirmed_at']; protected $casts=['amount'=>'decimal:2','reporting_amount'=>'decimal:2','is_anonymous'=>'boolean','message_is_public'=>'boolean','confirmed_at'=>'datetime']; public function campaign(){return $this->belongsTo(Campaign::class);} public function currency(){return $this->belongsTo(Currency::class);} public function transactions(){return $this->hasMany(PaymentTransaction::class);} public function receipt(){return $this->hasOne(DonationReceipt::class);} public function allocations(){return $this->hasMany(DonationAllocation::class);} }

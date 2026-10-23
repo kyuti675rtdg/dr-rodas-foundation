@@ -1,0 +1,4 @@
+<?php
+namespace App\Models;
+use Illuminate\Database\Eloquent\Model;
+class Campaign extends Model { protected $fillable=['category_id','slug','title','summary','description','purpose','target_amount','currency_id','status','starts_at','deadline','manager_id','is_featured','cover_image_url']; protected $casts=['target_amount'=>'decimal:2','is_featured'=>'boolean','starts_at'=>'date','deadline'=>'date']; public function category(){return $this->belongsTo(CampaignCategory::class);} public function currency(){return $this->belongsTo(Currency::class);} public function donations(){return $this->hasMany(Donation::class);} public function updates(){return $this->hasMany(CampaignUpdate::class);} public function media(){return $this->hasMany(CampaignMedia::class);} public function confirmedDonations(){return $this->donations()->where('status','confirmed');} }
