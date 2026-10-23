@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Cpu, GraduationCap, Landmark, Library, ScrollText } from "lucide-react";
+import { PageOpening, Rubric } from "@/components/Editorial";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = { title: "About the Foundation", description: "Dr. Rodas Foundation — Preserving Heritage. Advancing Knowledge. Inspiring Generations." };
 
@@ -15,69 +17,126 @@ const OBJECTIVES = [
 ];
 
 const PROGRAMS = [
-  [ScrollText, "Research and Documentation", "Support the study, documentation, and preservation of historical records, manuscripts, and cultural knowledge."],
-  [GraduationCap, "Education and Knowledge Sharing", "Develop educational materials, public programs, and learning opportunities for students, researchers, and communities."],
-  [BookOpen, "Publications and Digital Resources", "Share approved research, books, articles, reports, and educational materials."],
-  [Landmark, "Cultural Heritage Preservation", "Promote awareness of Ethiopia’s historical achievements, languages, traditions, and intellectual contributions."],
-  [Library, "Museum Development", "Advance the Dr. Rodas Museum Project as a major initiative dedicated to heritage preservation, research, exhibitions, and public education."],
-  [Cpu, "Digital Innovation", "Explore responsible uses of digital technology to preserve knowledge and expand access to cultural and educational resources."],
+  ["Research and Documentation", "Support the study, documentation, and preservation of historical records, manuscripts, and cultural knowledge."],
+  ["Education and Knowledge Sharing", "Develop educational materials, public programs, and learning opportunities for students, researchers, and communities."],
+  ["Publications and Digital Resources", "Share approved research, books, articles, reports, and educational materials."],
+  ["Cultural Heritage Preservation", "Promote awareness of Ethiopia’s historical achievements, languages, traditions, and intellectual contributions."],
+  ["Museum Development", "Advance the Dr. Rodas Museum Project as a major initiative dedicated to heritage preservation, research, exhibitions, and public education."],
+  ["Digital Innovation", "Explore responsible uses of digital technology to preserve knowledge and expand access to cultural and educational resources."],
 ] as const;
 
 export default function About() {
   return (
     <div>
-      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">About Us</p>
-        <h1 className="mt-2 font-serif text-4xl font-semibold text-navy">Dr. Rodas Foundation</h1>
-        <p className="mt-3 font-serif text-xl text-gold-dark">Preserving Heritage. Advancing Knowledge. Inspiring Generations.</p>
-        <div className="mt-6 space-y-5 leading-7 text-neutral-700">
-          <h2 className="font-serif text-2xl font-semibold text-navy">About the Foundation</h2>
-          <p>Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia’s rich knowledge traditions accessible to present and future generations.</p>
-          <p>The foundation promotes the study of Ethiopian history, languages, manuscripts, philosophy, astronomy, and traditional systems of knowledge while encouraging research, public engagement, and international collaboration.</p>
+      <PageOpening rubric="About the Foundation" title="Preserving Heritage. Advancing Knowledge. Inspiring Generations." />
 
-          <h2 className="font-serif text-2xl font-semibold text-navy">Our Mission</h2>
-          <p>To preserve and advance Ethiopian intellectual and cultural heritage through research, education, documentation, publications, and innovative technologies.</p>
-
-          <h2 className="font-serif text-2xl font-semibold text-navy">Our Vision</h2>
-          <p>To become a respected institution connecting Ethiopia’s rich heritage with global scholarship, contemporary learning, and future generations.</p>
-
-          <h2 className="font-serif text-2xl font-semibold text-navy">Our Core Objectives</h2>
-          <ul className="list-disc space-y-2 pl-6">
-            {OBJECTIVES.map((o) => <li key={o}>{o}</li>)}
-          </ul>
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
+          <Reveal className="lg:col-span-7">
+            <div className="max-w-2xl space-y-5 text-lg leading-8 text-navy/75">
+              <p>Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia&rsquo;s rich knowledge traditions accessible to present and future generations.</p>
+              <p>The foundation promotes the study of Ethiopian history, languages, manuscripts, philosophy, astronomy, and traditional systems of knowledge while encouraging research, public engagement, and international collaboration.</p>
+            </div>
+            <div className="mt-12 grid gap-10 border-t border-line pt-10 sm:grid-cols-2">
+              <div>
+                <Rubric>Our Mission</Rubric>
+                <p className="mt-3 font-serif text-xl leading-relaxed font-medium text-navy">To preserve and advance Ethiopian intellectual and cultural heritage through research, education, documentation, publications, and innovative technologies.</p>
+              </div>
+              <div>
+                <Rubric>Our Vision</Rubric>
+                <p className="mt-3 font-serif text-xl leading-relaxed font-medium text-navy">To become a respected institution connecting Ethiopia&rsquo;s rich heritage with global scholarship, contemporary learning, and future generations.</p>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-5">
+            <figure>
+              <div className="group overflow-hidden border border-line">
+                <Image
+                  src="/images/illuminated-manuscript-18th.jpg"
+                  alt="An Ethiopian illuminated manuscript from the 18th century, with painted religious scenes and Ge'ez text"
+                  width={1390} height={2000}
+                  className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+              <figcaption className="mt-3 text-xs leading-5 text-navy/55">Ethiopian illuminated manuscript, 18th century. Public domain, Princeton University Art Museum, via Wikimedia Commons.</figcaption>
+            </figure>
+          </Reveal>
         </div>
       </section>
 
-      <section className="bg-white py-14">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">What We Do</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">Our Programs and Initiatives</h2>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {PROGRAMS.map(([Icon, t, d]) => { const I = Icon as typeof Landmark; return (
-              <div key={t} className="rounded-3xl border border-mist bg-ivory/60 p-5"><I className="text-gold" /><h3 className="mt-3 font-serif text-lg font-semibold text-navy">{t}</h3><p className="mt-1 text-sm leading-6 text-neutral-600">{d}</p></div>); })}
-          </div>
+      <section className="bg-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+          <Reveal>
+            <Rubric>Our Core Objectives</Rubric>
+            <h2 className="mt-3 font-serif text-3xl font-medium text-navy sm:text-4xl">What the foundation works toward</h2>
+          </Reveal>
+          <ol className="mt-8 grid gap-x-14 lg:grid-cols-2">
+            {OBJECTIVES.map((o, i) => (
+              <li key={o} className="flex gap-5 border-b border-line py-5">
+                <span aria-hidden className="font-serif text-lg text-gold-dark">{String(i + 1).padStart(2, "0")}</span>
+                <span className="leading-7 text-navy/75">{o}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 text-xs text-navy/50">The objectives are a stated set of aims — listed in full, as the foundation publishes them.</p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
-        <div className="space-y-5 leading-7 text-neutral-700">
-          <h2 className="font-serif text-2xl font-semibold text-navy">Our Commitment</h2>
-          <p>We believe that preserving heritage is an investment in the future. By connecting historical knowledge with education, research, and technology, Dr. Rodas Foundation aims to help future generations understand, appreciate, and build upon Ethiopia’s intellectual and cultural legacy.</p>
-
-          <h2 className="font-serif text-2xl font-semibold text-navy">Registration &amp; contact</h2>
-          <p>Official registration details will be published on this page once verified by the foundation.</p>
-          <p>Website: <a className="font-semibold text-gold" href="https://drrodas.org">https://drrodas.org</a> · Email: <a className="font-semibold text-gold" href="mailto:support@drrodas.org">support@drrodas.org</a></p>
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+        <Reveal>
+          <Rubric>What We Do</Rubric>
+          <h2 className="mt-3 font-serif text-3xl font-medium text-navy sm:text-4xl">Our Programs and Initiatives</h2>
+          <div className="rule-gold mt-6" aria-hidden />
+        </Reveal>
+        <div>
+          {PROGRAMS.map(([t, d]) => (
+            <div key={t} className="grid gap-2 border-b border-line py-6 sm:grid-cols-12 sm:gap-6">
+              <h3 className="font-serif text-xl font-medium text-navy sm:col-span-5">{t}</h3>
+              <p className="leading-7 text-navy/65 sm:col-span-7">{d}</p>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-10 rounded-3xl bg-navy p-8 text-center text-white sm:p-10">
-          <h2 className="font-serif text-2xl font-semibold sm:text-3xl">Support Our Mission</h2>
-          <p className="mx-auto mt-3 max-w-2xl leading-7 text-neutral-300">Your contribution can help advance research, preserve valuable knowledge, support educational initiatives, and develop the Dr. Rodas Museum Project.</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href="/donate" className="rounded-full bg-white px-6 py-3 font-semibold text-navy hover:bg-ivory">Support the Foundation</Link>
-            <Link href="/museum-project" className="rounded-full border border-white/40 px-6 py-3 font-semibold hover:border-gold-light hover:text-gold-light">Explore the Museum Project</Link>
-            <Link href="/donate" className="rounded-full bg-gold px-6 py-3 font-semibold text-white hover:bg-gold-dark">Donate Now</Link>
+        <div className="mt-16 grid gap-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-7">
+            <Rubric>Our Commitment</Rubric>
+            <p className="mt-4 max-w-2xl font-serif text-2xl leading-snug font-medium text-navy">
+              We believe that preserving heritage is an investment in the future.
+            </p>
+            <p className="mt-4 max-w-2xl leading-7 text-navy/65">By connecting historical knowledge with education, research, and technology, Dr. Rodas Foundation aims to help future generations understand, appreciate, and build upon Ethiopia&rsquo;s intellectual and cultural legacy.</p>
+            <h2 className="mt-10 font-serif text-2xl font-medium text-navy">Registration &amp; contact</h2>
+            <p className="mt-3 leading-7 text-navy/65">Official registration details will be published on this page once verified by the foundation.</p>
+            <p className="mt-2 leading-7 text-navy/65">
+              Website: <a className="link-sweep font-semibold text-gold-dark" href="https://drrodas.org">https://drrodas.org</a>
+              {" · "}Email: <a className="link-sweep font-semibold text-gold-dark" href="mailto:support@drrodas.org">support@drrodas.org</a>
+            </p>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-5">
+            <figure>
+              <div className="group overflow-hidden border border-line">
+                <Image
+                  src="/images/bete-giyorgis-lalibela.jpg"
+                  alt="Bete Giyorgis, the rock-hewn Church of Saint George at Lalibela, carved downward into solid rock in the shape of a cross"
+                  width={3297} height={2326}
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+              <figcaption className="mt-3 text-xs leading-5 text-navy/55">Bete Giyorgis, Lalibela — a UNESCO World Heritage Site. Photograph by Bernard Gagnon, CC BY-SA 3.0, via Wikimedia Commons.</figcaption>
+            </figure>
+          </Reveal>
+        </div>
+
+        <Reveal>
+          <div className="mt-16 border-t border-line pt-12 text-center">
+            <h2 className="font-serif text-3xl font-medium text-navy sm:text-4xl">Support Our Mission</h2>
+            <p className="mx-auto mt-4 max-w-2xl leading-7 text-navy/65">Your contribution can help advance research, preserve valuable knowledge, support educational initiatives, and develop the Dr. Rodas Museum Project.</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/donate" className="inline-flex min-h-12 items-center rounded-full bg-gold px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-gold-dark">Support the Foundation</Link>
+              <Link href="/museum-project" className="inline-flex min-h-12 items-center rounded-full border border-navy/25 px-7 py-3 font-semibold text-navy transition-colors duration-300 hover:border-gold hover:text-gold-dark">Explore the Museum Project</Link>
+              <Link href="/donate" className="link-sweep min-h-12 content-center font-semibold text-gold-dark">Donate Now</Link>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

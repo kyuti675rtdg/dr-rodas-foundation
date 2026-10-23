@@ -3,7 +3,7 @@ import { Fraunces, Inter, Noto_Sans_Ethiopic } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"] });
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], style: ["normal", "italic"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const notoEthiopic = Noto_Sans_Ethiopic({ variable: "--font-noto-ethiopic", subsets: ["ethiopic"], weight: ["400", "700"], display: "swap" });
 export const metadata: Metadata = {

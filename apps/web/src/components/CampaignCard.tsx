@@ -1,28 +1,40 @@
-
-import Link from "next/link"; import { ArrowRight, CalendarDays, Users } from "lucide-react";
+import Link from "next/link";
+import { CalendarDays, Users } from "lucide-react";
 import { money, progress, type Campaign } from "@/lib/data";
+
 export function ProgressBar({ value }: { value: number }) {
-  return <div className="h-2.5 w-full overflow-hidden rounded-full bg-mist" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
-    <div className="h-full rounded-full bg-gradient-to-r from-gold to-gold-dark transition-all" style={{ width: `${value}%` }} /></div>;
+  return (
+    <div className="h-[3px] w-full overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100} aria-label={`Progress: ${value}%`}>
+      <div className="h-full rounded-full bg-gold transition-[width] duration-700 ease-out" style={{ width: `${value}%` }} />
+    </div>
+  );
 }
+
+/** Editorial campaign entry: a ruled row, not a card. */
 export default function CampaignCard({ c }: { c: Campaign }) {
   const p = progress(c);
   return (
-    <article className="flex flex-col overflow-hidden rounded-3xl border border-mist bg-white shadow-sm transition hover:shadow-lg">
-      <div className={`relative flex h-44 items-end bg-gradient-to-br ${c.hue} p-5`}>
-        <span className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,#d6d3d1_1px,transparent_0)] [background-size:22px_22px]" aria-hidden />
-        <div><p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-light">{c.categoryName}</p>
-        <h3 className="mt-1 font-serif text-2xl font-semibold leading-snug text-white">{c.title}</h3></div>
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <p className="flex-1 text-sm leading-6 text-neutral-600">{c.summary}</p>
-        <div className="mt-4"><div className="flex justify-between text-sm"><span className="font-bold text-navy">{money(c.raised, c.currency)} raised</span><span className="text-neutral-500">of {money(c.target, c.currency)}</span></div>
-          <div className="mt-2"><ProgressBar value={p} /></div>
-          <div className="mt-2 flex items-center gap-4 text-xs text-neutral-500"><span>{p}% funded</span><span className="inline-flex items-center gap-1"><Users size={13} /> {c.donors} donors</span><span className="inline-flex items-center gap-1"><CalendarDays size={13} /> Closes {c.deadline}</span></div></div>
-        <div className="mt-5 flex gap-3">
-          <Link href={`/donate?campaign=${c.slug}`} className="flex-1 rounded-full bg-navy px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-[#1B2452]">Donate</Link>
-          <Link href={`/campaigns/${c.slug}`} className="inline-flex flex-1 items-center justify-center gap-1 rounded-full border border-mist px-4 py-2.5 text-sm font-semibold text-navy hover:border-gold hover:text-gold">Details <ArrowRight size={15} /></Link>
+    <article className="group flex flex-col border-t border-line py-7">
+      <p className="text-xs font-semibold tracking-[0.16em] text-gold-dark uppercase">{c.categoryName}</p>
+      <h3 className="mt-2 font-serif text-2xl leading-snug font-medium text-navy">
+        <Link href={`/campaigns/${c.slug}`} className="transition-colors duration-300 group-hover:text-gold-dark">{c.title}</Link>
+      </h3>
+      <p className="mt-2 flex-1 leading-7 text-navy/65">{c.summary}</p>
+      <div className="mt-5">
+        <div className="flex flex-wrap justify-between gap-2 text-sm">
+          <span className="font-semibold text-navy">{money(c.raised, c.currency)} raised</span>
+          <span className="text-navy/55">of {money(c.target, c.currency)}</span>
         </div>
+        <div className="mt-2.5"><ProgressBar value={p} /></div>
+        <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-navy/55">
+          <span>{p}% funded</span>
+          <span className="inline-flex items-center gap-1"><Users size={13} aria-hidden /> {c.donors} donors</span>
+          <span className="inline-flex items-center gap-1"><CalendarDays size={13} aria-hidden /> Closes {c.deadline}</span>
+        </div>
+      </div>
+      <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+        <Link href={`/donate?campaign=${c.slug}`} className="link-sweep min-h-8 content-center text-gold-dark">Donate to this campaign</Link>
+        <Link href={`/campaigns/${c.slug}`} className="link-sweep min-h-8 content-center text-navy">Campaign details</Link>
       </div>
     </article>
   );

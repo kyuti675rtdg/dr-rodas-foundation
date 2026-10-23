@@ -1,19 +1,85 @@
 @import "tailwindcss";
+
 @theme inline {
   --font-sans: var(--font-inter);
   --font-serif: var(--font-fraunces);
 }
+
 @theme {
-  /* Dr. Rodas Foundation brand palette (master prompt, 2026-10-23) */
+  /* Dr. Rodas Foundation — manuscript folio design tokens (2026-10-23 redesign).
+     Paper and ivory are the reading room; navy is ink; gold is gilding —
+     used sparingly, the way gold leaf is used on a manuscript page. */
+  --color-paper: #FDFCFA;
+  --color-ivory: #FAF7F0;
+  --color-parchment: #F3EEE2;
   --color-navy: #0B1239;
   --color-navy-2: #1B2452;
   --color-gold: #A77C2C;
-  --color-gold-dark: #8C6622;
+  --color-gold-dark: #7C5A1E;
   --color-gold-light: #D9B45B;
-  --color-ivory: #FAF7F0;
-  --color-mist: #E8E8EC;
+  --color-line: #E7E1D3;
+  /* legacy alias so older utility classes resolve to the warm hairline */
+  --color-mist: #E7E1D3;
 }
-html { scroll-behavior: smooth; }
-body { background: #FAF7F0; color: #0B1239; font-family: var(--font-inter), var(--font-noto-ethiopic), "Noto Sans Ethiopic", system-ui, sans-serif; }
-.font-serif { font-family: var(--font-fraunces), Georgia, serif; }
-::selection { background: #A77C2C33; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-navy);
+  font-family: var(--font-inter), var(--font-noto-ethiopic), "Noto Sans Ethiopic", system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif {
+  font-family: var(--font-fraunces), var(--font-noto-ethiopic), Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+::selection {
+  background: #A77C2C2E;
+  color: #0B1239;
+}
+
+/* Visible keyboard focus everywhere — a thin gold ring, offset from the control. */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Gold underline sweep for primary navigation and editorial links. */
+.link-sweep {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s ease, color 0.2s ease;
+  padding-bottom: 2px;
+}
+.link-sweep:hover,
+.link-sweep:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Thin gilded rule used under section headings. */
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(to right, var(--color-gold), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

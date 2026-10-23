@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BookOpen, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { PUBLICATIONS } from "@/lib/data";
+import { Rubric } from "@/components/Editorial";
+import Reveal from "@/components/Reveal";
 
 export function generateStaticParams() { return PUBLICATIONS.map((p) => ({ slug: p.slug })); }
 
@@ -19,24 +21,41 @@ export default async function PublicationDetail({ params }: { params: Promise<{ 
   if (!p) notFound();
   const related = PUBLICATIONS.filter((x) => x.slug !== p.slug && (x.category === p.category || x.topic === p.topic)).slice(0, 3);
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
-      <Link href="/publications" className="font-semibold text-gold hover:text-gold-dark">← All publications</Link>
-      <p className="mt-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-gold"><BookOpen size={14} /> {p.category} · {p.topic}</p>
-      <h1 className="mt-2 font-serif text-4xl font-semibold leading-tight text-navy">{p.title}</h1>
-      <p className="mt-3 text-sm text-neutral-500">{p.author} · {p.dateLabel}</p>
-      <p className="mt-4 rounded-2xl border border-gold/30 bg-ivory px-4 py-3 text-sm leading-6 text-gold-dark">{p.status}</p>
-      <p className="mt-6 text-lg leading-8 text-neutral-700">{p.summary}</p>
-      <div className="mt-4 space-y-4 leading-7 text-neutral-700"><p>{p.body}</p></div>
-      <div className="mt-8 rounded-3xl border border-mist bg-white p-6">
-        <h2 className="flex items-center gap-2 font-serif text-xl font-semibold text-navy"><Download size={18} className="text-gold" /> PDF &amp; downloads</h2>
-        {p.fileUrl
-          ? <p className="mt-2 text-sm leading-6 text-neutral-600">This publication is authorized for download by the foundation. <a className="font-semibold text-gold" href={p.fileUrl}>Download PDF</a></p>
-          : <p className="mt-2 text-sm leading-6 text-neutral-600">Download available after foundation approval. No file is attached to this seed entry, and no download is offered until the foundation authorizes one.</p>}
+    <div className="mx-auto max-w-7xl px-4 pt-14 pb-20 sm:px-6">
+      <div className="max-w-3xl">
+        <Link href="/publications" className="link-sweep text-sm font-semibold text-gold-dark">All publications</Link>
+        <Reveal>
+          <div className="mt-8">
+            <Rubric>{p.category} · {p.topic}</Rubric>
+            <h1 className="mt-4 font-serif text-4xl leading-[1.1] font-medium text-navy sm:text-5xl">{p.title}</h1>
+            <p className="mt-4 border-b border-line pb-6 text-sm text-navy/55">{p.author} · {p.dateLabel}</p>
+          </div>
+        </Reveal>
+        <p className="mt-6 border-l-2 border-gold/70 pl-4 text-sm leading-6 text-gold-dark">{p.status}</p>
+        <p className="mt-8 font-serif text-xl leading-relaxed text-navy/85">{p.summary}</p>
+        <div className="mt-5 space-y-4 text-lg leading-8 text-navy/75"><p>{p.body}</p></div>
+
+        <div className="mt-10 border-t border-line pt-8">
+          <h2 className="flex items-center gap-2 font-serif text-2xl font-medium text-navy"><Download size={19} className="text-gold-dark" aria-hidden /> PDF &amp; downloads</h2>
+          {p.fileUrl
+            ? <p className="mt-3 leading-7 text-navy/70">This publication is authorized for download by the foundation. <a className="link-sweep font-semibold text-gold-dark" href={p.fileUrl}>Download PDF</a></p>
+            : <p className="mt-3 leading-7 text-navy/70">Download available after foundation approval. No file is attached to this seed entry, and no download is offered until the foundation authorizes one.</p>}
+        </div>
+
+        {related.length > 0 && (
+          <section className="mt-12 border-t border-line pt-8">
+            <h2 className="font-serif text-2xl font-medium text-navy">Related publications</h2>
+            <ul className="mt-4">
+              {related.map((r) => (
+                <li key={r.slug} className="border-b border-line py-4">
+                  <Link href={`/publications/${r.slug}`} className="link-sweep font-serif text-lg font-medium text-navy">{r.title}</Link>
+                  <span className="block text-sm text-navy/55">{r.category}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
-      {related.length > 0 && (
-        <section className="mt-10"><h2 className="font-serif text-2xl font-semibold text-navy">Related publications</h2>
-          <ul className="mt-4 space-y-3">{related.map((r) => <li key={r.slug}><Link href={`/publications/${r.slug}`} className="font-semibold text-gold hover:text-gold-dark">{r.title}</Link><span className="text-sm text-neutral-500"> — {r.category}</span></li>)}</ul>
-        </section>)}
     </div>
   );
 }

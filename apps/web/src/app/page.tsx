@@ -1,128 +1,196 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Eye, GraduationCap, Landmark, ScrollText, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import CampaignCard from "@/components/CampaignCard";
+import Reveal from "@/components/Reveal";
+import { Rubric, SectionHeading } from "@/components/Editorial";
 import { CAMPAIGNS, NEWS, PUBLICATIONS, money, progress } from "@/lib/data";
 import { ProgressBar } from "@/components/CampaignCard";
 import { RecentDonations } from "@/components/Fundraising";
-import { PublicationCard } from "./publications/PublicationsClient";
+import { PublicationRow } from "./publications/PublicationsClient";
 import { NewsCard } from "./news/NewsClient";
+
+const PROGRAMS = [
+  ["Research and Documentation", "Support the study, documentation, and preservation of historical records, manuscripts, and cultural knowledge.", "/about"],
+  ["Education and Knowledge Sharing", "Educational materials, public programs, and learning opportunities for students, researchers, and communities.", "/about"],
+  ["Publications and Digital Resources", "Approved research, books, articles, reports, and educational materials, shared openly.", "/publications"],
+  ["Cultural Heritage Preservation", "Awareness of Ethiopia’s historical achievements, languages, traditions, and intellectual contributions.", "/about"],
+  ["Museum Development", "The Dr. Rodas Museum Project — heritage preservation, research, exhibitions, and public education.", "/museum-project"],
+  ["Digital Innovation", "Responsible uses of digital technology to preserve knowledge and expand access to it.", "/about"],
+] as const;
 
 export default function Home() {
   const featured = CAMPAIGNS.filter((c) => c.featured);
   const museum = CAMPAIGNS[0];
-  const totalTarget = CAMPAIGNS.reduce((s, c) => s + c.target, 0);
-  const totalRaised = CAMPAIGNS.reduce((s, c) => s + c.raised, 0);
-  const pct = totalTarget > 0 ? Math.round((totalRaised / totalTarget) * 1000) / 10 : 0;
   const featuredPubs = PUBLICATIONS.filter((p) => p.featured);
   const latestNews = NEWS.slice(0, 3);
   return (
     <div>
-      <section className="relative overflow-hidden bg-navy text-white">
-        <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_1px_1px,#D9B45B_1px,transparent_0)] [background-size:26px_26px]" aria-hidden />
-        <div className="relative mx-auto flex max-w-7xl flex-col gap-10 px-4 py-20 sm:px-6 lg:flex-row lg:items-center lg:py-28">
-          <div className="flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gold-light">Dr. Rodas Foundation · Museum</p>
-            <h1 className="mt-4 max-w-3xl font-serif text-4xl font-semibold leading-tight sm:text-6xl">Preserving Heritage.<br />Advancing Knowledge.<br />Inspiring Generations.</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-300">Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia’s rich knowledge traditions accessible to present and future generations.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/donate" className="rounded-full bg-gold px-7 py-3.5 font-semibold text-white hover:bg-gold-dark">Donate Now</Link>
-              <Link href="/museum-project" className="inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-3.5 font-semibold hover:border-gold-light hover:text-gold-light">Explore Museum Project <ArrowRight size={17} /></Link>
-            </div>
-            <dl className="mt-12 grid max-w-2xl grid-cols-3 gap-6 border-t border-white/10 pt-8 text-center sm:text-left">
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-400">Active campaigns</dt><dd className="mt-1 font-serif text-3xl font-semibold">{CAMPAIGNS.length}</dd></div>
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-400">Combined goal</dt><dd className="mt-1 font-serif text-3xl font-semibold">{money(totalTarget)}</dd></div>
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-400">Reporting</dt><dd className="mt-1 font-serif text-3xl font-semibold">Public</dd></div>
-            </dl>
-            <p className="mt-6 max-w-2xl text-xs leading-5 text-neutral-400">Development preview: figures in preview mode are seed values (currently zero raised). Live totals come only from confirmed donations in the foundation&rsquo;s system.</p>
+      {/* Hero — the one memorable moment: an oversized serif headline, the
+          foundation medallion, and a real Garima Gospels folio. Quiet else. */}
+      <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6 lg:pt-20">
+        <Reveal>
+          <div className="flex items-center gap-4">
+            <Image src="/logo.png" alt="Dr. Rodas Foundation — official logo" width={56} height={56} priority className="h-14 w-14 rounded-full bg-white object-contain ring-1 ring-gold/60" />
+            <p className="text-sm text-navy/60">ዶክተር ሮዳስ ፋውንዴሽን · Dr. Rodas Foundation</p>
           </div>
-          <div className="mx-auto shrink-0 lg:mx-0">
-            <Image src="/logo.png" alt="Dr. Rodas Foundation — official logo" width={320} height={320} priority className="h-64 w-64 rounded-full bg-white object-contain shadow-2xl ring-4 ring-gold/50 sm:h-80 sm:w-80" />
-            <p className="mt-4 text-center font-serif text-lg text-gold-light">ዶክተር ሮዳስ ፋውንዴሽን</p>
-            <p className="text-center text-xs uppercase tracking-[0.22em] text-neutral-400">Dr. Rodas Foundation</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">Our Mission</p>
-            <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">Preserving Heritage. Advancing Knowledge. Inspiring Generations.</h2>
-            <p className="mt-4 leading-7 text-neutral-600"><strong className="text-navy">Mission:</strong> To preserve and advance Ethiopian intellectual and cultural heritage through research, education, documentation, publications, and innovative technologies.</p>
-            <p className="mt-3 leading-7 text-neutral-600"><strong className="text-navy">Vision:</strong> To become a respected institution connecting Ethiopia’s rich heritage with global scholarship, contemporary learning, and future generations.</p>
-            <Link href="/about" className="mt-5 inline-flex items-center gap-2 font-semibold text-gold hover:text-gold-dark">More about the foundation <ArrowRight size={16} /></Link></div>
-          <div className="grid grid-cols-2 gap-4">
-            {[[Landmark,"Preservation","Conservation and safe storage for at-risk collections."],[BookOpen,"Exhibitions","Galleries and travelling shows that tell our shared story."],[GraduationCap,"Education","Free learning labs and programs for schools and families."],[ScrollText,"Archives","Digitized records the whole world can explore."]].map(([Icon, t, d]) => {
-              const I = Icon as typeof Landmark; return (
-              <div key={t as string} className="rounded-3xl border border-mist bg-white p-5"><I className="text-gold" /><h3 className="mt-3 font-serif text-lg font-semibold text-navy">{t as string}</h3><p className="mt-1 text-sm leading-6 text-neutral-600">{d as string}</p></div>);})}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">Featured · Museum Project</p>
-        <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">Featured Museum Project fundraising</h2>
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl border border-mist bg-ivory/60 p-7">
-            <h3 className="font-serif text-2xl font-semibold text-navy">{museum.title}</h3>
-            <p className="mt-3 leading-7 text-neutral-600">{museum.summary}</p>
-            <div className="mt-5 flex justify-between text-sm"><span className="font-bold text-navy">{money(museum.raised, museum.currency)} raised</span><span className="text-neutral-500">of {money(museum.target, museum.currency)}</span></div>
-            <div className="mt-2"><ProgressBar value={progress(museum)} /></div>
-            <p className="mt-2 text-xs text-neutral-500">{progress(museum)}% funded · confirmed donations only</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/museum-project" className="rounded-full bg-navy px-6 py-3 font-semibold text-white hover:bg-navy-2">Explore Museum Project</Link>
-              <Link href="/donate" className="rounded-full bg-gold px-6 py-3 font-semibold text-white hover:bg-gold-dark">Donate to the Museum</Link>
+          <h1 className="mt-8 max-w-4xl font-serif text-5xl leading-[1.04] font-medium text-navy sm:text-6xl lg:text-7xl">
+            Preserving Heritage.<br />Advancing Knowledge.<br />Inspiring Generations.
+          </h1>
+          <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-14">
+            <figure className="lg:col-span-7">
+              <div className="group overflow-hidden border border-line">
+                <Image
+                  src="/images/garima-gospels-folio.jpg"
+                  alt="Illuminated folio from the Garima Gospels, one of the oldest surviving Ethiopian illuminated manuscripts"
+                  width={1350} height={1743}
+                  priority
+                  className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03] sm:aspect-[16/10]"
+                />
+              </div>
+              <figcaption className="mt-3 text-xs leading-5 text-navy/55">
+                A folio of the Garima Gospels — among the world&rsquo;s oldest illuminated Christian manuscripts, written in Ge&rsquo;ez and preserved in Ethiopia. Public domain, via Wikimedia Commons.
+              </figcaption>
+            </figure>
+            <div className="lg:col-span-5 lg:pt-2">
+              <p className="text-lg leading-8 text-navy/75">
+                Dr. Rodas Foundation is dedicated to preserving, documenting, researching, and sharing Ethiopian intellectual, historical, and cultural heritage. Through education, research, publications, cultural initiatives, and digital innovation, the foundation seeks to make Ethiopia&rsquo;s rich knowledge traditions accessible to present and future generations.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/donate" className="inline-flex min-h-12 items-center rounded-full bg-gold px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-gold-dark">Donate Now</Link>
+                <Link href="/museum-project" className="inline-flex min-h-12 items-center rounded-full border border-navy/25 px-7 py-3 font-semibold text-navy transition-colors duration-300 hover:border-gold hover:text-gold-dark">Explore the Museum Project</Link>
+              </div>
+              <p className="mt-8 border-t border-line pt-5 text-xs leading-5 text-navy/55">
+                Development preview: figures shown in preview mode are seed values (currently zero raised). Live totals come only from confirmed donations in the foundation&rsquo;s system.
+              </p>
             </div>
           </div>
-          <div className="rounded-3xl border border-mist bg-white p-7">
-            <h3 className="font-serif text-2xl font-semibold text-navy">Fundraising summary</h3>
-            <dl className="mt-5 grid grid-cols-2 gap-5">
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-500">Target</dt><dd className="mt-1 font-serif text-2xl font-semibold text-navy">{money(totalTarget)}</dd></div>
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-500">Verified raised</dt><dd className="mt-1 font-serif text-2xl font-semibold text-navy">{money(totalRaised)}</dd></div>
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-500">Remaining</dt><dd className="mt-1 font-serif text-2xl font-semibold text-navy">{money(totalTarget - totalRaised)}</dd></div>
-              <div><dt className="text-xs uppercase tracking-widest text-neutral-500">Progress</dt><dd className="mt-1 font-serif text-2xl font-semibold text-navy">{pct}%</dd></div>
-            </dl>
-            <div className="mt-4"><ProgressBar value={pct} /></div>
-            <p className="mt-4 text-sm leading-6 text-neutral-600">Impact: gifts fund preservation, exhibitions, education and digital archives — tracked from receipt to result on the <Link href="/transparency" className="font-semibold text-gold">transparency page</Link>.</p>
-          </div>
-        </div>
-        <div className="mt-12 flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">Featured Campaigns</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">Where your gift goes to work</h2></div>
-          <Link href="/campaigns" className="inline-flex items-center gap-2 font-semibold text-gold">All campaigns <ArrowRight size={16} /></Link></div>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">{featured.map((c) => <CampaignCard key={c.slug} c={c} />)}</div>
-      </div></section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">Featured Publications</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">From the digital library</h2></div>
-          <Link href="/publications" className="inline-flex items-center gap-2 font-semibold text-gold">All publications <ArrowRight size={16} /></Link></div>
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{featuredPubs.map((p) => <PublicationCard key={p.slug} p={p} />)}</div>
+        </Reveal>
       </section>
 
-      <section className="bg-white py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">Latest News</p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold text-navy">News &amp; announcements</h2></div>
-          <Link href="/news" className="inline-flex items-center gap-2 font-semibold text-gold">All news <ArrowRight size={16} /></Link></div>
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{latestNews.map((a) => <NewsCard key={a.slug} a={a} />)}</div>
-      </div></section>
+      {/* Mission & vision — official text */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-7">
+            <Rubric>Our Mission</Rubric>
+            <p className="mt-4 font-serif text-2xl leading-snug font-medium text-navy sm:text-[2rem] sm:leading-[1.3]">
+              To preserve and advance Ethiopian intellectual and cultural heritage through research, education, documentation, publications, and innovative technologies.
+            </p>
+            <p className="mt-6 max-w-xl leading-7 text-navy/65">
+              The foundation promotes the study of Ethiopian history, languages, manuscripts, philosophy, astronomy, and traditional systems of knowledge while encouraging research, public engagement, and international collaboration.
+            </p>
+            <Link href="/about" className="link-sweep mt-6 inline-block font-semibold text-gold-dark">More about the foundation</Link>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-5">
+            <div className="border-l-2 border-gold/70 pl-6">
+              <Rubric>Our Vision</Rubric>
+              <p className="mt-4 font-serif text-xl leading-relaxed text-navy/85 italic">
+                To become a respected institution connecting Ethiopia&rsquo;s rich heritage with global scholarship, contemporary learning, and future generations.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6"><RecentDonations /></section>
-
-      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
-        <div className="rounded-3xl bg-navy p-8 text-white sm:p-12">
-          <div className="flex items-center gap-3"><Eye className="text-gold-light" /><h2 className="font-serif text-2xl font-semibold sm:text-3xl">Giving you can verify</h2></div>
-          <p className="mt-3 max-w-3xl leading-7 text-neutral-300">Campaign totals count confirmed donations only. Fees, refunds, allocations and disbursements are tracked separately, approved through a finance workflow, and summarised publicly — without ever exposing a donor&rsquo;s private information.</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/transparency" className="rounded-full bg-white px-6 py-3 font-semibold text-navy hover:bg-ivory">View Financial Transparency</Link>
-            <Link href="/news" className="rounded-full border border-white/25 px-6 py-3 font-semibold hover:border-gold-light hover:text-gold-light">Read Foundation News</Link>
+      {/* Museum project feature — asymmetric editorial split */}
+      <section className="bg-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+          <SectionHeading rubric="The Museum Project" title="A museum for Ethiopia’s intellectual heritage" href="/museum-project" hrefLabel="Explore the Museum Project" />
+          <div className="mt-10 grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
+            <Reveal className="lg:col-span-5">
+              <div className="group overflow-hidden border border-line">
+                <Image
+                  src="/images/geez-manuscript-page.jpg"
+                  alt="A page of Ge'ez manuscript writing from an Ethiopian prayer book"
+                  width={2192} height={2384}
+                  className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+              <p className="mt-3 text-xs leading-5 text-navy/55">Ge&rsquo;ez manuscript page, Ethiopian prayer book. Public domain, via Wikimedia Commons.</p>
+            </Reveal>
+            <Reveal delay={0.1} className="lg:col-span-7">
+              <h3 className="font-serif text-2xl font-medium text-navy">{museum.title}</h3>
+              <p className="mt-3 max-w-xl leading-7 text-navy/65">{museum.summary}</p>
+              <div className="mt-8 max-w-xl">
+                <div className="flex flex-wrap justify-between gap-2 text-sm">
+                  <span className="font-semibold text-navy">{money(museum.raised, museum.currency)} raised</span>
+                  <span className="text-navy/55">of {money(museum.target, museum.currency)} goal</span>
+                </div>
+                <div className="mt-2.5"><ProgressBar value={progress(museum)} /></div>
+                <p className="mt-2.5 text-xs text-navy/55">{progress(museum)}% funded · confirmed donations only</p>
+              </div>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/donate" className="inline-flex min-h-12 items-center rounded-full bg-navy px-6 py-3 font-semibold text-white transition-colors duration-300 hover:bg-navy-2">Donate to the Museum</Link>
+                <Link href="/museum-project" className="link-sweep min-h-12 content-center font-semibold text-gold-dark">How the project unfolds</Link>
+              </div>
+            </Reveal>
           </div>
-          <p className="mt-5 flex items-center gap-2 text-xs text-neutral-400"><ShieldCheck size={14} /> Donations are recorded with unique references and receipts; refunds reverse progress through recorded transactions, never silent edits.</p>
         </div>
-        <div className="mt-8 rounded-3xl bg-gold p-8 text-center text-white sm:p-10">
-          <h2 className="font-serif text-2xl font-semibold sm:text-3xl">Help preserve this heritage</h2>
-          <p className="mx-auto mt-3 max-w-2xl leading-7 text-white/90">Your gift — large or small — protects manuscripts and collections, and opens learning to everyone.</p>
-          <Link href="/donate" className="mt-6 inline-block rounded-full bg-navy px-8 py-3.5 font-semibold text-white hover:bg-navy-2">Donate Now</Link>
+      </section>
+
+      {/* Programs — ruled rows, official program text */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+        <SectionHeading rubric="What the foundation does" title="Programs and initiatives" href="/about" hrefLabel="All programs" />
+        <div className="mt-4">
+          {PROGRAMS.map(([t, d, href]) => (
+            <Reveal key={t}>
+              <div className="group grid gap-2 border-b border-line py-6 sm:grid-cols-12 sm:gap-6">
+                <h3 className="font-serif text-xl font-medium text-navy sm:col-span-4">{t}</h3>
+                <p className="leading-7 text-navy/65 sm:col-span-6">{d}</p>
+                <div className="sm:col-span-2 sm:text-right">
+                  <Link href={href} className="link-sweep text-sm font-semibold text-gold-dark">Read more</Link>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
+      </section>
+
+      {/* Campaigns */}
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:pb-24">
+        <SectionHeading rubric="Fundraising campaigns" title="Where your gift goes to work" href="/campaigns" hrefLabel="All campaigns" />
+        <div className="grid gap-x-12 md:grid-cols-2">
+          {featured.map((c) => <CampaignCard key={c.slug} c={c} />)}
+        </div>
+      </section>
+
+      {/* Publications — reading-room rows */}
+      <section className="bg-ivory">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+          <SectionHeading rubric="Publications" title="From the digital library" href="/publications" hrefLabel="Browse the library" />
+          <div>
+            {featuredPubs.map((p) => <PublicationRow key={p.slug} p={p} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* News */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:py-24">
+        <SectionHeading rubric="News" title="Foundation news &amp; announcements" href="/news" hrefLabel="All news" />
+        <div className="grid gap-x-12 lg:grid-cols-3">
+          {latestNews.map((a) => <NewsCard key={a.slug} a={a} />)}
+        </div>
+      </section>
+
+      {/* Recent donations + verification, then the single navy band */}
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:pb-24">
+        <RecentDonations />
+        <Reveal>
+          <div className="mt-14 bg-navy px-6 py-12 text-white sm:px-10 lg:px-14 lg:py-16">
+            <div className="grid gap-10 lg:grid-cols-12">
+              <div className="lg:col-span-8">
+                <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-gold-light uppercase"><ShieldCheck size={15} aria-hidden /> Giving you can verify</p>
+                <h2 className="mt-4 font-serif text-3xl leading-tight font-medium sm:text-4xl">Every gift, accounted for in public.</h2>
+                <p className="mt-4 max-w-2xl leading-7 text-white/70">Campaign totals count confirmed donations only. Fees, refunds, allocations and disbursements are tracked separately, approved through a finance workflow, and summarised publicly — without ever exposing a donor&rsquo;s private information.</p>
+              </div>
+              <div className="flex flex-col items-start justify-center gap-4 lg:col-span-4 lg:items-end">
+                <Link href="/donate" className="inline-flex min-h-12 items-center rounded-full bg-gold px-7 py-3 font-semibold text-white transition-colors duration-300 hover:bg-gold-dark">Donate Now</Link>
+                <Link href="/transparency" className="link-sweep text-sm font-semibold text-white/85 hover:text-gold-light">View financial transparency</Link>
+              </div>
+            </div>
+            <p className="mt-8 border-t border-white/10 pt-5 text-xs leading-5 text-white/50">Donations are recorded with unique references and receipts; refunds reverse progress through recorded transactions, never silent edits.</p>
+          </div>
+        </Reveal>
       </section>
     </div>
   );
